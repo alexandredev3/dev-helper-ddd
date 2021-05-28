@@ -21,7 +21,8 @@ module.exports = {
     'react',
     '@typescript-eslint',
     'prettier',
-    'eslint-plugin-import-helpers'
+    'eslint-plugin-import-helpers',
+    'import'
   ],
   rules: {
     "no-new": "off",
@@ -94,7 +95,10 @@ module.exports = {
     "import/resolver": {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
+      },
+      "typescript": {
+        "project": "packages/*/tsconfig.json",
+      },
     }
   }
 };

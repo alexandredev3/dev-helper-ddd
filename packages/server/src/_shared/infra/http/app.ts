@@ -3,6 +3,8 @@ import express from 'express';
 
 import { v1Routes } from './api/v1';
 
+import '@shared/infra/database/typeorm';
+
 const app = express();
 const port = process.env.PORT || 3333;
 
