@@ -3,17 +3,17 @@ import * as connectionOptions from '@utils/environment';
 module.exports = [
   {
     name: 'development',
-    type: connectionOptions.DEV_HELPER_DB_TYPE,
+    type: 'sqlite',
     host: connectionOptions.DEV_HELPER_DB_HOST,
     port: connectionOptions.DEV_HELPER_DB_PORT,
     username: connectionOptions.DEV_HELPER_DB_USERNAME,
     password: connectionOptions.DEV_HELPER_DB_PASSWORD,
-    database: connectionOptions.DEV_HELPER_DB_DATABASE,
+    database: './src/_shared/infra/database/typeorm/database.sqlite',
     logging: connectionOptions.DEV_HELPER_DB_LOGGING,
-    migrations: ['./src/_shared/infra/typeorm/migrations/*[.ts,.js]'],
-    entities: ['./src/_shared/infra/typeorm/entities/*[.ts,.js]'],
+    migrations: ['./src/_shared/infra/database/typeorm/migrations/*[.ts,.js]'],
+    entities: ['./src/_shared/infra/database/typeorm/entities/*[.ts,.js]'],
     cli: {
-      migrationsDir: './src/_shared/infra/typeorm/migrations',
+      migrationsDir: './src/_shared/infra/database/typeorm/migrations',
     },
   },
   {
@@ -25,10 +25,10 @@ module.exports = [
     password: connectionOptions.DEV_HELPER_TEST_DB_PASSWORD,
     database: connectionOptions.DEV_HELPER_TEST_DB_DATABASE,
     logging: connectionOptions.DEV_HELPER_TEST_DB_LOGGING,
-    migrations: ['./src/_shared/infra/typeorm/migrations/*[.ts,.js]'],
-    entities: ['./src/_shared/infra/typeorm/entities/*[.ts,.js]'],
+    migrations: ['./src/_shared/infra/database/typeorm/migrations/*[.ts,.js]'],
+    entities: ['./src/_shared/infra/database/typeorm/entities/*[.ts,.js]'],
     cli: {
-      migrationsDir: './src/_shared/infra/typeorm/migrations',
+      migrationsDir: './src/_shared/infra/database/typeorm/migrations',
     },
   },
   {
@@ -40,10 +40,10 @@ module.exports = [
     password: connectionOptions.DEV_HELPER_DB_PASSWORD,
     database: connectionOptions.DEV_HELPER_DB_DATABASE,
     logging: connectionOptions.DEV_HELPER_DB_LOGGING,
-    migrations: ['./src/_shared/infra/typeorm/migrations/*[.ts,.js]'],
-    entities: ['./src/_shared/infra/typeorm/entities/*[.ts,.js]'],
+    migrations: ['./src/_shared/infra/database/typeorm/migrations/*[.ts,.js]'],
+    entities: ['./src/_shared/infra/database/typeorm/entities/*[.ts,.js]'],
     cli: {
-      migrationsDir: './src/_shared/infra/typeorm/migrations',
+      migrationsDir: './src/_shared/infra/database/typeorm/migrations',
     },
   },
 ];
