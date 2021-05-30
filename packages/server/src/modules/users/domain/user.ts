@@ -4,11 +4,12 @@ import { Entity } from '@shared/domain/Entity';
 import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 
 import { UserName } from './UserName';
+import { UserPassword } from './UserPassword';
 
 interface IUserProps {
   name: UserName;
   username: UserName;
-  password: string;
+  password: UserPassword;
   avatar_url?: string;
   bio?: string;
   email: string;

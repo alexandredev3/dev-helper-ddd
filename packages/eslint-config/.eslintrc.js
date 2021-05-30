@@ -35,6 +35,7 @@ module.exports = {
     "linebreak-style": ["error", process.platform === 'win32' ? 'windows' : 'unix'],
     "import/prefer-default-export": "off",
     "@typescript-eslint/explicit-function-return-type": ["off"],
+    "prefer-promise-reject-errors": ["off"],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
