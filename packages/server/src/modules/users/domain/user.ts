@@ -3,9 +3,11 @@ import { Result } from '@shared/core/Result';
 import { Entity } from '@shared/domain/Entity';
 import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 
+import { UserName } from './UserName';
+
 interface IUserProps {
-  name: string;
-  username: string;
+  name: UserName;
+  username: UserName;
   password: string;
   avatar_url?: string;
   bio?: string;
@@ -18,6 +20,7 @@ interface IUserProps {
   lastLogin?: Date;
 }
 
+// extends with aggregateRoot when implemented the DomainEvents.
 export class User extends Entity<IUserProps> {
   private constructor(props: IUserProps, id?: UniqueEntityID) {
     super(props, id);

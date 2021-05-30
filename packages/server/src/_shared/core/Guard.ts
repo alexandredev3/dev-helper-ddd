@@ -57,4 +57,30 @@ export class Guard {
 
     throw new Error('[InvalidOperation]: argument must be null or undefined');
   }
+
+  public static againstAtLeast(numChars: number, text: string): IGuardResult {
+    if (text.length >= numChars) {
+      return {
+        succeeded: true,
+      };
+    }
+
+    return {
+      succeeded: false,
+      message: `Text is not at least ${numChars} chars.`,
+    };
+  }
+
+  public static againstAtMost(numChars: number, text: string): IGuardResult {
+    if (text.length <= numChars) {
+      return {
+        succeeded: true,
+      };
+    }
+
+    return {
+      succeeded: false,
+      message: `Text is greater than ${numChars} chars.`,
+    };
+  }
 }
