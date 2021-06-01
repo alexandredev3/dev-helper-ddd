@@ -3,6 +3,7 @@ import { Result } from '@shared/core/Result';
 import { Entity } from '@shared/domain/Entity';
 import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 
+import { UserEmail } from './UserEmail';
 import { UserName } from './UserName';
 import { UserPassword } from './UserPassword';
 
@@ -12,7 +13,7 @@ interface IUserProps {
   password: UserPassword;
   avatar_url?: string;
   bio?: string;
-  email: string;
+  email: UserEmail;
   tags: string[];
   isEmailVerified?: boolean;
   acessToken: string;
