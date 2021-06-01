@@ -6,6 +6,7 @@ import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 import { UserEmail } from './UserEmail';
 import { UserName } from './UserName';
 import { UserPassword } from './UserPassword';
+import { UserTags } from './UserTags';
 
 interface IUserProps {
   name: UserName;
@@ -14,7 +15,7 @@ interface IUserProps {
   avatar_url?: string;
   bio?: string;
   email: UserEmail;
-  tags: string[];
+  tags: UserTags;
   isEmailVerified?: boolean;
   acessToken: string;
   refreshToken: string;
