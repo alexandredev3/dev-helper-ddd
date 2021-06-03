@@ -51,8 +51,8 @@ export class UserTags extends ValueObject<IUserTagsProps> {
 
   /**
    *
-   * @param props           `tags` e.g: ["node", "react", "reactnative"].
-   * @returns               Returns `tags` and `inlineTags`, `tags` to show in UI and `inlineTags` to persist in the database.
+   * @param props           `tags` e.g: `["node", "react", "reactnative"]`.
+   * @returns               Returns `tags` and `inlineTags`, `tags: (Array["node", "react"])` to show in UI. `inlineTags: String("node, react")` to persist in the database.
    */
   public static create(
     props: Omit<IUserTagsProps, 'inlineTags'>
