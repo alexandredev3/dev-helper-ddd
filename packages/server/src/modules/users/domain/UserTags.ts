@@ -1,9 +1,10 @@
+import { Guard } from '@shared/core/Guard';
 import { Result } from '@shared/core/Result';
 import { ValueObject } from '@shared/domain/ValueObject';
 
 interface IUserTagsProps {
   tags: string[];
-  tag: string;
+  inlineTags: string;
 }
 
 export class UserTags extends ValueObject<IUserTagsProps> {
@@ -11,40 +12,79 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     return this.props.tags;
   }
 
-  get tag(): string {
-    return this.props.tag;
+  get inlineTags(): string {
+    return this.props.inlineTags;
   }
 
   private constructor(props: IUserTagsProps) {
     super(props);
   }
 
-  private static isValidTags(tags: string): boolean {
+  private static isValidTags(tags: string | string[]): boolean {
     const regex = /^[a-zA-Z]*$/;
+
+    if (Array.isArray(tags)) {
+      for (const tag of tags) {
+        const result = regex.test(tag);
+
+        if (!result) {
+          return result;
+        }
+      }
+
+      return true;
+    }
 
     return regex.test(tags);
   }
 
-  private static format(tags: string[]): string {
-    const tag = tags.join(',').replace(/\s/g, '');
+  private static format(tags: string[]): {
+    tags: string[];
+    inlineTags: string;
+  } {
+    const regex = /\s/g;
 
-    return tag;
+    const tagsFormted = tags.map((tag) => tag.replace(regex, '').toLowerCase());
+    const tagFormated = tags.join(',').replace(regex, '').toLowerCase();
+
+    return {
+      tags: tagsFormted,
+      inlineTags: tagFormated,
+    };
   }
 
-  public static create(props: IUserTagsProps): Result<UserTags> {
-    const { tags } = props;
+  /**
+   *
+   * @param props           `tags` Example: ["node", "react", "reactnative"].
+   * @returns               Returns `tags` and `inlineTags`, `tags` to show in UI and `inlineTags` to persist in the database.
+   */
+  public static create(
+    props: Omit<IUserTagsProps, 'inlineTags'>
+  ): Result<UserTags> {
+    const tagResult = Guard.againstNullOrUndefined(props.tags, 'tags');
 
-    const tag = this.format(tags);
-    const isValidTags = this.isValidTags(tag);
+    if (!tagResult.succeeded) {
+      return Result.fail<UserTags>(tagResult.message);
+    }
+
+    const { tags, inlineTags } = this.format(props.tags);
+
+    const isValidTags = this.isValidTags(tags);
 
     if (!isValidTags) {
+      return Result.fail<UserTags>('Tags is not valid');
+    }
+
+    const isValidInlineTags = this.isValidTags(inlineTags);
+
+    if (!isValidInlineTags) {
       return Result.fail<UserTags>('Tags is not valid');
     }
 
     return Result.ok<UserTags>(
       new UserTags({
         tags,
-        tag,
+        inlineTags,
       })
     );
   }

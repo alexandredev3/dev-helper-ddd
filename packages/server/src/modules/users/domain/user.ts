@@ -3,6 +3,8 @@ import { Result } from '@shared/core/Result';
 import { Entity } from '@shared/domain/Entity';
 import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 
+import { UserAvatar } from './UserAvatar';
+import { UserBio } from './UserBio';
 import { UserEmail } from './UserEmail';
 import { UserName } from './UserName';
 import { UserPassword } from './UserPassword';
@@ -12,8 +14,8 @@ interface IUserProps {
   name: UserName;
   username: UserName;
   password: UserPassword;
-  avatar_url?: string;
-  bio?: string;
+  avatar_url?: UserAvatar;
+  bio?: UserBio;
   email: UserEmail;
   tags: UserTags;
   isEmailVerified?: boolean;
