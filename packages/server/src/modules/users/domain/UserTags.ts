@@ -20,22 +20,18 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     super(props);
   }
 
-  private static isValidTags(tags: string | string[]): boolean {
+  private static isValidTags(tags: string[]): boolean {
     const regex = /^[a-zA-Z]*$/;
 
-    if (Array.isArray(tags)) {
-      for (const tag of tags) {
-        const result = regex.test(tag);
+    for (const tag of tags) {
+      const result = regex.test(tag);
 
-        if (!result) {
-          return result;
-        }
+      if (!result) {
+        return result;
       }
-
-      return true;
     }
 
-    return regex.test(tags);
+    return true;
   }
 
   private static format(tags: string[]): {
@@ -72,12 +68,6 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     const isValidTags = this.isValidTags(tags);
 
     if (!isValidTags) {
-      return Result.fail<UserTags>('Tags is not valid');
-    }
-
-    const isValidInlineTags = this.isValidTags(inlineTags);
-
-    if (!isValidInlineTags) {
       return Result.fail<UserTags>('Tags is not valid');
     }
 
