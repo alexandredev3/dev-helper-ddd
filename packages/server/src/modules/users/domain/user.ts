@@ -3,9 +3,9 @@ import { Result } from '@shared/core/Result';
 import { Entity } from '@shared/domain/Entity';
 import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 
-import { UserAvatar } from './UserAvatar';
 import { UserBio } from './UserBio';
 import { UserEmail } from './UserEmail';
+import { UserId } from './UserId';
 import { UserName } from './UserName';
 import { UserPassword } from './UserPassword';
 import { UserTags } from './UserTags';
@@ -14,7 +14,7 @@ interface IUserProps {
   name: UserName;
   username: UserName;
   password: UserPassword;
-  avatar_url?: UserAvatar;
+  // avatar?: UserAvatar; TODO: Create an AvatarEntity
   bio?: UserBio;
   email: UserEmail;
   tags: UserTags;
@@ -27,6 +27,54 @@ interface IUserProps {
 
 // extends with aggregateRoot when implemented the DomainEvents.
 export class User extends Entity<IUserProps> {
+  get userId(): UserId {
+    return UserId.create(this._id).getValue();
+  }
+
+  get username(): UserName {
+    return this.props.username;
+  }
+
+  get password(): UserPassword {
+    return this.props.password;
+  }
+
+  // get avatar(): UserAvatar | undefined {
+  //   return this.props.avatar;
+  // }
+
+  get email(): UserEmail {
+    return this.props.email;
+  }
+
+  get tags(): UserTags {
+    return this.props.tags;
+  }
+
+  get bio(): UserBio | undefined {
+    return this.props.bio;
+  }
+
+  get isEmailVerified(): boolean {
+    return !!this.props.isEmailVerified;
+  }
+
+  get acessToken(): string {
+    return this.props.acessToken;
+  }
+
+  get refreshToken(): string {
+    return this.props.refreshToken;
+  }
+
+  get isDeleted(): boolean {
+    return !!this.props.isDeleted;
+  }
+
+  get lastLogin(): Date | undefined {
+    return this.props.lastLogin;
+  }
+
   private constructor(props: IUserProps, id?: UniqueEntityID) {
     super(props, id);
   }

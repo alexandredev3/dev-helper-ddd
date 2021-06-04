@@ -27,6 +27,7 @@ export class createUsers1622809482782 implements MigrationInterface {
           {
             name: 'bio',
             type: 'text',
+            isNullable: true,
           },
           {
             name: 'email',
@@ -43,6 +44,11 @@ export class createUsers1622809482782 implements MigrationInterface {
           },
           {
             name: 'is_email_verified',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'is_deleted',
             type: 'boolean',
             default: false,
           },

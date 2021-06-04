@@ -4,7 +4,6 @@ import { ValueObject } from '@shared/domain/ValueObject';
 
 interface IUserTagsProps {
   tags: string[];
-  inlineTags: string;
 }
 
 export class UserTags extends ValueObject<IUserTagsProps> {
@@ -12,8 +11,12 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     return this.props.tags;
   }
 
-  get inlineTags(): string {
-    return this.props.inlineTags;
+  /**
+   *
+   * @returns       Returns tags, e.g: `"node, react, reactnative"`
+   */
+  get tagsRaw(): string {
+    return this.props.tags.join(',').replace(/\s/g, '').toLowerCase();
   }
 
   private constructor(props: IUserTagsProps) {
@@ -34,38 +37,24 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     return true;
   }
 
-  private static format(tags: string[]): {
-    tags: string[];
-    inlineTags: string;
-  } {
-    const regex = /\s/g;
+  private static format(tags: string[]): string[] {
+    const tagsFormated = tags.map((tag) =>
+      tag.replace(/\s/g, '').toLowerCase()
+    );
 
-    const tagsFormted = tags.map((tag) => tag.replace(regex, '').toLowerCase());
-    const tagFormated = tags.join(',').replace(regex, '').toLowerCase();
-
-    return {
-      tags: tagsFormted,
-      inlineTags: tagFormated,
-    };
+    return tagsFormated;
   }
 
-  /**
-   *
-   * @param props           `tags` e.g: `["node", "react", "reactnative"]`.
-   * @returns               Returns `tags` and `inlineTags`, `tags: (Array["node", "react"])` to show in UI. `inlineTags: String("node, react")` to persist in the database.
-   */
-  public static create(
-    props: Omit<IUserTagsProps, 'inlineTags'>
-  ): Result<UserTags> {
+  public static create(props: IUserTagsProps): Result<UserTags> {
     const tagResult = Guard.againstNullOrUndefined(props.tags, 'tags');
 
     if (!tagResult.succeeded) {
       return Result.fail<UserTags>(tagResult.message);
     }
 
-    const { tags, inlineTags } = this.format(props.tags);
+    const isValidTags = this.isValidTags(props.tags);
 
-    const isValidTags = this.isValidTags(tags);
+    const tags = this.format(props.tags);
 
     if (!isValidTags) {
       return Result.fail<UserTags>('Tags is not valid');
@@ -74,7 +63,6 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     return Result.ok<UserTags>(
       new UserTags({
         tags,
-        inlineTags,
       })
     );
   }
