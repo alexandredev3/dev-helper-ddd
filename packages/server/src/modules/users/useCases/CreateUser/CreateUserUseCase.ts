@@ -7,23 +7,12 @@ import { UserPassword } from '@modules/users/domain/UserPassword';
 import { UserTags } from '@modules/users/domain/UserTags';
 import { IUserRepository } from '@modules/users/repositories/IUserRepository';
 import { AppError } from '@shared/core/AppError';
-import { Either, left, Result, right } from '@shared/core/Result';
+import { left, Result, right } from '@shared/core/Result';
 import { IUseCase } from '@shared/core/UseCase';
 
 import { ICreateUserDTO } from './CreateUserDTO';
 import { CreateUserErrors } from './CreateUserErrors';
-
-/**
- * Left: Errors;
- * Right: Success;
- */
-type Response = Either<
-  | CreateUserErrors.EmailAlreadyExistsError
-  | CreateUserErrors.UsernameTakenError
-  | AppError.UnexpectedError
-  | Result<any>,
-  Result<void>
->;
+import { Response } from './CreateUserResponse';
 
 @injectable()
 export class CreateUserUseCase
