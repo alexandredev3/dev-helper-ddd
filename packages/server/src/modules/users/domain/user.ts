@@ -19,8 +19,8 @@ interface IUserProps {
   email: UserEmail;
   tags: UserTags;
   isEmailVerified?: boolean;
-  acessToken: string;
-  refreshToken: string;
+  acessToken?: string;
+  refreshToken?: string;
   isDeleted?: boolean;
   lastLogin?: Date;
 }
@@ -59,11 +59,11 @@ export class User extends Entity<IUserProps> {
     return !!this.props.isEmailVerified;
   }
 
-  get acessToken(): string {
+  get acessToken(): string | undefined {
     return this.props.acessToken;
   }
 
-  get refreshToken(): string {
+  get refreshToken(): string | undefined {
     return this.props.refreshToken;
   }
 

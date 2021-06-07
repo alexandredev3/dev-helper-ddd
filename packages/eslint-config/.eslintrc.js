@@ -28,6 +28,7 @@ module.exports = {
     "no-new": "off",
     "no-prototype-builtins": "off",
     "camelcase": "off",
+    "no-use-before-define": ["error", { "classes": false }],
     "no-restricted-syntax": "off",
     "max-classes-per-file": "off",
     "@typescript-eslint/no-explicit-any": "off",

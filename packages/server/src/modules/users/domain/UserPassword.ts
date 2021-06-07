@@ -6,7 +6,7 @@ import { ValueObject } from '@shared/domain/ValueObject';
 
 interface IUserPasswordProps {
   value: string;
-  hashed: boolean;
+  hashed?: boolean;
 }
 
 export class UserPassword extends ValueObject<IUserPasswordProps> {
@@ -37,7 +37,7 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
   }
 
   public isAlreadyHashed(): boolean {
-    return this.props.hashed;
+    return this.props.hashed ? this.props.hashed : false;
   }
 
   private bcryptCompare(
