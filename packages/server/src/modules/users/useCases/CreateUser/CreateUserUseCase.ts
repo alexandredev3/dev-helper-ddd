@@ -26,6 +26,8 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
   }
 
   public async execute(request: ICreateUserDTO): Promise<Response> {
+    let user: User;
+
     const nameOrError = UserName.create({
       name: request.name,
     });
@@ -71,8 +73,6 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
         const alreadyCreatedUserByNickname =
           await this.userRepository.findUserByUsername(nickname);
 
-        console.log(alreadyCreatedUserByNickname);
-
         if (alreadyCreatedUserByNickname) {
           return left(new CreateUserErrors.UsernameTakenError(nickname.value));
         }
@@ -90,7 +90,11 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
         return left(Result.fail<void>(userOrError.error?.toString()));
       }
 
-      const user = await this.userRepository.create(userOrError.getValue());
+      try {
+        user = await this.userRepository.create(userOrError.getValue());
+      } catch (error) {
+        return left(new AppError.UnexpectedError(error));
+      }
 
       return right(
         Result.ok<ICreateUserDTOResponse>({

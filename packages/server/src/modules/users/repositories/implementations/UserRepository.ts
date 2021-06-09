@@ -5,6 +5,7 @@ import { UserName } from '@modules/users/domain/UserName';
 import { UserMap } from '@modules/users/mappers/userMap';
 
 import { User } from '../../domain/User';
+import { User as UserPersistence } from '../../infra/typeorm/entities/User';
 import { TypeormUserRepository } from '../../infra/typeorm/repositories/TypeormUserRepository';
 import { IUserRepository } from '../IUserRepository';
 
@@ -18,7 +19,9 @@ export class UserRepository implements IUserRepository {
   public async create(user: User): Promise<User> {
     const rawUser = await UserMap.toPersistence(user);
 
-    const userCreated = this.ormRepository.create(rawUser);
+    const userCreated = this.ormRepository.create(
+      rawUser
+    ) as unknown as UserPersistence;
 
     await this.ormRepository.save(userCreated);
 
@@ -27,6 +30,10 @@ export class UserRepository implements IUserRepository {
 
   public async findUserById(id: string): Promise<User> {
     const user = await this.ormRepository.findOne(id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     return UserMap.toDomain(user);
   }
@@ -37,6 +44,10 @@ export class UserRepository implements IUserRepository {
         username: username instanceof UserName ? username.value : username,
       },
     });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     return UserMap.toDomain(user);
   }

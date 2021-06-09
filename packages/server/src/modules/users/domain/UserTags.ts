@@ -6,6 +6,10 @@ interface IUserTagsProps {
   tags: string[];
 }
 
+interface IUserTagsRawProps {
+  tagsRaw: string;
+}
+
 export class UserTags extends ValueObject<IUserTagsProps> {
   get tags(): string[] {
     return this.props.tags;
@@ -58,17 +62,37 @@ export class UserTags extends ValueObject<IUserTagsProps> {
 
     let { tags } = props;
 
-    if (typeof props.tags === 'string') {
-      tags = this.tagsRawToArray(props.tags);
-    }
-
     const isValidTags = this.isValidTags(tags);
-
-    tags = this.format(tags);
 
     if (!isValidTags) {
       return Result.fail<UserTags>('Tags is not valid');
     }
+
+    tags = this.format(tags);
+
+    return Result.ok<UserTags>(
+      new UserTags({
+        tags,
+      })
+    );
+  }
+
+  public static createRaw(props: IUserTagsRawProps): Result<UserTags> {
+    const tagRawResult = Guard.againstNullOrUndefined(props.tagsRaw, 'tagsRaw');
+
+    if (!tagRawResult.succeeded) {
+      return Result.fail<UserTags>(tagRawResult.message);
+    }
+
+    let tags = this.tagsRawToArray(props.tagsRaw);
+
+    const isValidTags = this.isValidTags(tags);
+
+    if (!isValidTags) {
+      return Result.fail<UserTags>('TagsRaw is not valid');
+    }
+
+    tags = this.format(tags);
 
     return Result.ok<UserTags>(
       new UserTags({

@@ -6,6 +6,7 @@ import { UserEmail } from '../domain/UserEmail';
 import { UserName } from '../domain/UserName';
 import { UserPassword } from '../domain/UserPassword';
 import { UserTags } from '../domain/UserTags';
+import { User as UserPersistence } from '../infra/typeorm/entities/User';
 
 export class UserMap implements IMapper<User> {
   public static async toPersistence(user: User): Promise<any> {
@@ -32,7 +33,7 @@ export class UserMap implements IMapper<User> {
     };
   }
 
-  public static toDomain(raw: any): User {
+  public static toDomain(raw: UserPersistence): User {
     const userName = UserName.create({
       name: raw.name,
     });
@@ -46,8 +47,8 @@ export class UserMap implements IMapper<User> {
     const userEmail = UserEmail.create({
       value: raw.email,
     });
-    const userTags = UserTags.create({
-      tags: raw.tags,
+    const userTags = UserTags.createRaw({
+      tagsRaw: raw.tags,
     });
 
     const user = User.create(
@@ -62,6 +63,11 @@ export class UserMap implements IMapper<User> {
       },
       new UniqueEntityID(raw.id)
     );
+
+    if (user.isFailure) {
+      console.log(user.errorValue());
+      throw new Error(user.errorValue().toString());
+    }
 
     return user.getValue();
   }
