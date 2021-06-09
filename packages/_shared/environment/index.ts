@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { join } from 'path';
 
-const path = join(__dirname, '..', '..', '..', '..', '..', '.env');
+const path = join(__dirname, '..', '..', '..', '.env');
 
 dotenv.config({
   path,

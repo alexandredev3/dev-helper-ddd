@@ -31,6 +31,10 @@ export class User extends Entity<IUserProps> {
     return UserId.create(this._id).getValue();
   }
 
+  get name(): UserName {
+    return this.props.name;
+  }
+
   get username(): UserName {
     return this.props.username;
   }

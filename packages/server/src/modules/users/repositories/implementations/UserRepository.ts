@@ -15,13 +15,7 @@ export class UserRepository implements IUserRepository {
     this.ormRepository = getCustomRepository(TypeormUserRepository);
   }
 
-  public async create(user: User): Promise<User | null> {
-    const userExists = await this.exists(user.email);
-
-    if (userExists) {
-      throw new Error('User already exists.');
-    }
-
+  public async create(user: User): Promise<User> {
     const rawUser = await UserMap.toPersistence(user);
 
     const userCreated = this.ormRepository.create(rawUser);
@@ -31,28 +25,18 @@ export class UserRepository implements IUserRepository {
     return UserMap.toDomain(userCreated);
   }
 
-  public async findUserById(id: string): Promise<User | null> {
+  public async findUserById(id: string): Promise<User> {
     const user = await this.ormRepository.findOne(id);
-
-    if (!user) {
-      throw new Error('User does not exists');
-    }
 
     return UserMap.toDomain(user);
   }
 
-  public async findUserByUsername(
-    username: UserName | string
-  ): Promise<User | null> {
+  public async findUserByUsername(username: UserName | string): Promise<User> {
     const user = await this.ormRepository.findOne({
       where: {
         username: username instanceof UserName ? username.value : username,
       },
     });
-
-    if (!user) {
-      throw new Error('User does not exists');
-    }
 
     return UserMap.toDomain(user);
   }

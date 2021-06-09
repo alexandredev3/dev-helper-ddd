@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 import { IMapper } from '@shared/infra/Mapper';
 
 import { User } from '../domain/User';
@@ -20,53 +21,48 @@ export class UserMap implements IMapper<User> {
 
     return {
       id: user.userId.id.toValue(),
-      name: user.username.value,
+      name: user.name.value,
+      username: user.username.value,
       encrypted_password: password,
       bio: user.bio?.value,
       email: user.email.value,
-      tags: user.tags,
+      tags: user.tags.tagsRaw,
       is_email_verified: user.isEmailVerified,
       is_deleted: user.isDeleted,
     };
   }
 
-  public static toDomain(raw: any): User | null {
-    const userNameOrError = UserName.create({
+  public static toDomain(raw: any): User {
+    const userName = UserName.create({
       name: raw.name,
     });
-    const userNickNameOrError = UserName.create({
+    const userNickName = UserName.create({
       name: raw.username,
     });
-    const userPasswordOrError = UserPassword.create({
+    const userPassword = UserPassword.create({
       value: raw.encrypted_password,
       hashed: true,
     });
-    const userEmailOrError = UserEmail.create({
+    const userEmail = UserEmail.create({
       value: raw.email,
     });
-    const userTagsOrError = UserTags.create({
+    const userTags = UserTags.create({
       tags: raw.tags,
     });
 
-    const userOrError = User.create({
-      name: userNameOrError.getValue(),
-      username: userNickNameOrError.getValue(),
-      password: userPasswordOrError.getValue(),
-      email: userEmailOrError.getValue(),
-      tags: userTagsOrError.getValue(),
-      isEmailVerified: raw.is_email_verified,
-      isDeleted: raw.is_deleted,
-    });
+    const user = User.create(
+      {
+        name: userName.getValue(),
+        username: userNickName.getValue(),
+        password: userPassword.getValue(),
+        email: userEmail.getValue(),
+        tags: userTags.getValue(),
+        isEmailVerified: raw.is_email_verified,
+        isDeleted: raw.is_deleted,
+      },
+      new UniqueEntityID(raw.id)
+    );
 
-    if (userOrError.isFailure) {
-      console.log(userOrError.error);
-      return null;
-    }
-
-    if (userOrError.isSuccess) {
-      return userOrError.getValue();
-    }
-
-    return null;
+    return user.getValue();
   }
 }

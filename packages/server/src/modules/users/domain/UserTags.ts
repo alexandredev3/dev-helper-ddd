@@ -45,6 +45,10 @@ export class UserTags extends ValueObject<IUserTagsProps> {
     return tagsFormated;
   }
 
+  private static tagsRawToArray(tagsRaw: string): string[] {
+    return tagsRaw.split(',');
+  }
+
   public static create(props: IUserTagsProps): Result<UserTags> {
     const tagResult = Guard.againstNullOrUndefined(props.tags, 'tags');
 
@@ -52,9 +56,15 @@ export class UserTags extends ValueObject<IUserTagsProps> {
       return Result.fail<UserTags>(tagResult.message);
     }
 
-    const isValidTags = this.isValidTags(props.tags);
+    let { tags } = props;
 
-    const tags = this.format(props.tags);
+    if (typeof props.tags === 'string') {
+      tags = this.tagsRawToArray(props.tags);
+    }
+
+    const isValidTags = this.isValidTags(tags);
+
+    tags = this.format(tags);
 
     if (!isValidTags) {
       return Result.fail<UserTags>('Tags is not valid');

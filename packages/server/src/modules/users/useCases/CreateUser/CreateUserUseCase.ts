@@ -10,14 +10,12 @@ import { AppError } from '@shared/core/AppError';
 import { left, Result, right } from '@shared/core/Result';
 import { IUseCase } from '@shared/core/UseCase';
 
-import { ICreateUserDTO } from './CreateUserDTO';
+import { ICreateUserDTO, ICreateUserDTOResponse } from './CreateUserDTO';
 import { CreateUserErrors } from './CreateUserErrors';
 import { Response } from './CreateUserResponse';
 
 @injectable()
-export class CreateUserUseCase
-  implements IUseCase<ICreateUserDTO, Promise<Response>>
-{
+export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
   private userRepository: IUserRepository;
 
   constructor(
@@ -27,7 +25,7 @@ export class CreateUserUseCase
     this.userRepository = userRepository;
   }
 
-  public async execute(request: ICreateUserDTO): Promise<any> {
+  public async execute(request: ICreateUserDTO): Promise<Response> {
     const nameOrError = UserName.create({
       name: request.name,
     });
@@ -73,6 +71,8 @@ export class CreateUserUseCase
         const alreadyCreatedUserByNickname =
           await this.userRepository.findUserByUsername(nickname);
 
+        console.log(alreadyCreatedUserByNickname);
+
         if (alreadyCreatedUserByNickname) {
           return left(new CreateUserErrors.UsernameTakenError(nickname.value));
         }
@@ -87,13 +87,17 @@ export class CreateUserUseCase
       });
 
       if (userOrError.isFailure) {
-        return left(Result.fail<User>(userOrError.error?.toString()));
+        return left(Result.fail<void>(userOrError.error?.toString()));
       }
 
-      const user = userOrError.getValue();
+      const user = await this.userRepository.create(userOrError.getValue());
 
       return right(
-        Result.ok<User | null>(await this.userRepository.create(user))
+        Result.ok<ICreateUserDTOResponse>({
+          id: user.userId.id.toValue(),
+          name: user.name.value,
+          username: user.username.value,
+        })
       );
     } catch (error) {
       return left(new AppError.UnexpectedError(error));

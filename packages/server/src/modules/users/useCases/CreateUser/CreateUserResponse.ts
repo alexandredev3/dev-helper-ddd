@@ -1,6 +1,7 @@
 import { AppError } from '@shared/core/AppError';
 import { Either, Result } from '@shared/core/Result';
 
+import { ICreateUserDTOResponse } from './CreateUserDTO';
 import { CreateUserErrors } from './CreateUserErrors';
 
 /**
@@ -12,5 +13,5 @@ export type Response = Either<
   | CreateUserErrors.UsernameTakenError
   | AppError.UnexpectedError
   | Result<any>,
-  Result<void>
+  Result<ICreateUserDTOResponse | null>
 >;

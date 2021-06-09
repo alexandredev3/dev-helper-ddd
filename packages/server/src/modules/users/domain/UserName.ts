@@ -6,6 +6,7 @@ interface IUserNameProps {
   name: string;
 }
 
+// TODO: Create a separate entity for the user nickname.
 export class UserName extends ValueObject<IUserNameProps> {
   public static maxLength: number = 28;
 
