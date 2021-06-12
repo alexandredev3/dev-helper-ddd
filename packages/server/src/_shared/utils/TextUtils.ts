@@ -10,4 +10,22 @@ export class TextUtils {
 
     return safeText;
   }
+
+  public static validateTags(tags: string[]): boolean {
+    const regex = /^[a-zA-Z]*$/;
+
+    if (!Array.isArray(tags)) {
+      return false;
+    }
+
+    for (const tag of tags) {
+      const result = regex.test(tag);
+
+      if (!result) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

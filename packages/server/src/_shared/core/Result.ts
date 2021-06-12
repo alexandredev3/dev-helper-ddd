@@ -1,6 +1,6 @@
 interface IResultProps<T> {
   isSuccess: boolean;
-  error?: T | string;
+  error?: T;
   value?: T;
 }
 
@@ -9,7 +9,7 @@ export class Result<T> {
 
   public isFailure: boolean;
 
-  public error: T | string | null;
+  public error: T | null;
 
   private _value: T | null;
 
@@ -45,7 +45,7 @@ export class Result<T> {
     return this._value;
   }
 
-  public errorValue(): T | string {
+  public errorValue(): T {
     if (!this.isFailure || !this.error) {
       throw new Error(
         'Cannot get the error of a successe result. Use `getValue` instead.'

@@ -11,7 +11,6 @@ import { CreateUserErrors } from './CreateUserErrors';
 export type Response = Either<
   | CreateUserErrors.EmailAlreadyExistsError
   | CreateUserErrors.UsernameTakenError
-  | AppError.UnexpectedError
-  | Result<any>,
-  Result<ICreateUserDTOResponse | null>
+  | AppError.UnexpectedError,
+  Result<ICreateUserDTOResponse>
 >;

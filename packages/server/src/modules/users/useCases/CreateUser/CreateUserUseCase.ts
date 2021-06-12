@@ -87,7 +87,9 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
       });
 
       if (userOrError.isFailure) {
-        return left(Result.fail<void>(userOrError.error?.toString()));
+        return left(
+          Result.fail<void>(userOrError.error?.toString())
+        ) as Response;
       }
 
       try {

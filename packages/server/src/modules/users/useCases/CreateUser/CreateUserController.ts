@@ -14,17 +14,19 @@ export class CreateUserController extends BaseController {
   }
 
   public async executeImpl(request: Request, response: Response): Promise<any> {
-    const dto: ICreateUserDTO = request.body as unknown as ICreateUserDTO;
+    let dto: ICreateUserDTO = request.body as unknown as ICreateUserDTO;
 
-    // dto = {
-    //   name: TextUtils.sanitize(dto.name),
-    //   username: TextUtils.sanitize(dto.username),
-    //   email: TextUtils.sanitize(dto.email),
-    //   password: TextUtils.sanitize(dto.password),
-    //   tags: dto.tags.map((tag) => {
-    //     return TextUtils.sanitize(tag);
-    //   }),
-    // };
+    dto = {
+      name: TextUtils.sanitize(dto.name),
+      username: TextUtils.sanitize(dto.username),
+      email: TextUtils.sanitize(dto.email),
+      password: TextUtils.sanitize(dto.password),
+      tags: TextUtils.validateTags(dto.tags)
+        ? dto.tags.map((tag) => {
+            return TextUtils.sanitize(tag);
+          })
+        : '',
+    } as ICreateUserDTO;
 
     try {
       const useCase = container.resolve(CreateUserUseCase);
@@ -46,10 +48,7 @@ export class CreateUserController extends BaseController {
         }
       }
 
-      return this.ok<ICreateUserDTOResponse>(
-        response,
-        result.value.getValue() as ICreateUserDTOResponse
-      );
+      return this.ok<ICreateUserDTOResponse>(response, result.value.getValue());
     } catch (error) {
       return this.fail(response, error);
     }
