@@ -1,7 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 
-import { UserEmail } from '@modules/users/domain/UserEmail';
-import { UserName } from '@modules/users/domain/UserName';
+import { UserEmail } from '@modules/users/domain/User/Email';
+import { Username } from '@modules/users/domain/User/Username';
 import { UserMap } from '@modules/users/mappers/userMap';
 
 import { User } from '../../domain/User';
@@ -38,10 +38,10 @@ export class UserRepository implements IUserRepository {
     return UserMap.toDomain(user);
   }
 
-  public async findUserByUsername(username: UserName | string): Promise<User> {
+  public async findUserByUsername(username: Username | string): Promise<User> {
     const user = await this.ormRepository.findOne({
       where: {
-        username: username instanceof UserName ? username.value : username,
+        username: username instanceof Username ? username.value : username,
       },
     });
 

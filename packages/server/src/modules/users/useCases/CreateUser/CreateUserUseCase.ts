@@ -1,10 +1,11 @@
 import { injectable, inject } from 'tsyringe';
 
 import { User } from '@modules/users/domain/User';
-import { UserEmail } from '@modules/users/domain/UserEmail';
-import { UserName } from '@modules/users/domain/UserName';
-import { UserPassword } from '@modules/users/domain/UserPassword';
-import { UserTags } from '@modules/users/domain/UserTags';
+import { UserEmail } from '@modules/users/domain/User/Email';
+import { UserName } from '@modules/users/domain/User/Name';
+import { UserPassword } from '@modules/users/domain/User/Password';
+import { UserTags } from '@modules/users/domain/User/Tags';
+import { Username } from '@modules/users/domain/User/Username';
 import { IUserRepository } from '@modules/users/repositories/IUserRepository';
 import { AppError } from '@shared/core/AppError';
 import { left, Result, right } from '@shared/core/Result';
@@ -31,8 +32,8 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
     const nameOrError = UserName.create({
       name: request.name,
     });
-    const nickOrError = UserName.create({
-      name: request.username,
+    const username = Username.create({
+      value: request.username,
     });
     const emailOrError = UserEmail.create({
       value: request.email,
@@ -46,7 +47,7 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
 
     const DTOResult = Result.combine([
       nameOrError,
-      nickOrError,
+      username,
       emailOrError,
       passwordOrError,
       tagsOrError,
@@ -59,7 +60,7 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
     const name = nameOrError.getValue();
     const email = emailOrError.getValue();
     const password = passwordOrError.getValue();
-    const nickname = nickOrError.getValue();
+    const nickname = username.getValue();
     const tags = tagsOrError.getValue();
 
     try {

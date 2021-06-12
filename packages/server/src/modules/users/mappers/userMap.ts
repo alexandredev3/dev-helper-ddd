@@ -2,10 +2,11 @@ import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 import { IMapper } from '@shared/infra/Mapper';
 
 import { User } from '../domain/User';
-import { UserEmail } from '../domain/UserEmail';
-import { UserName } from '../domain/UserName';
-import { UserPassword } from '../domain/UserPassword';
-import { UserTags } from '../domain/UserTags';
+import { UserEmail } from '../domain/User/Email';
+import { UserName } from '../domain/User/Name';
+import { UserPassword } from '../domain/User/Password';
+import { UserTags } from '../domain/User/Tags';
+import { Username } from '../domain/User/Username';
 import { User as UserPersistence } from '../infra/typeorm/entities/User';
 
 export class UserMap implements IMapper<User> {
@@ -37,8 +38,8 @@ export class UserMap implements IMapper<User> {
     const userName = UserName.create({
       name: raw.name,
     });
-    const userNickName = UserName.create({
-      name: raw.username,
+    const username = Username.create({
+      value: raw.username,
     });
     const userPassword = UserPassword.create({
       value: raw.encrypted_password,
@@ -54,7 +55,7 @@ export class UserMap implements IMapper<User> {
     const user = User.create(
       {
         name: userName.getValue(),
-        username: userNickName.getValue(),
+        username: username.getValue(),
         password: userPassword.getValue(),
         email: userEmail.getValue(),
         tags: userTags.getValue(),
