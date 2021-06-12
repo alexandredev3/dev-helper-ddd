@@ -53,7 +53,7 @@ export class CreateUserUseCase implements IUseCase<ICreateUserDTO, Response> {
     ]);
 
     if (DTOResult.isFailure) {
-      return left(Result.fail<void>(DTOResult.error));
+      return left(new CreateUserErrors.DTOFailed(DTOResult.errorValue()));
     }
 
     const name = nameOrError.getValue();

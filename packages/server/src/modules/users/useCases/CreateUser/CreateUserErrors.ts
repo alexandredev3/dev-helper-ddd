@@ -23,4 +23,15 @@ export namespace CreateUserErrors {
       });
     }
   }
+
+  export class DTOFailed extends Result<UseCaseError> {
+    constructor(error: string) {
+      super({
+        isSuccess: false,
+        error: {
+          message: error,
+        },
+      });
+    }
+  }
 }

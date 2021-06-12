@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import * as config from './packages/_shared/environment';
+import * as config from '@dev-helper/environment';
 
 module.exports = {
   type: config.DEV_HELPER_DB_TYPE,
@@ -8,16 +8,7 @@ module.exports = {
   port: config.DEV_HELPER_DB_PORT,
   username: config.DEV_HELPER_DB_USERNAME,
   password: config.DEV_HELPER_DB_PASSWORD,
-  database: join(
-    __dirname,
-    'packages',
-    'server',
-    'src',
-    '_shared',
-    'infra',
-    'database',
-    'database.sqlite'
-  ),
+  database: config.DEV_HELPER_DB_DATABASE,
   logging: config.DEV_HELPER_DB_LOGGING,
   migrations: [
     join(

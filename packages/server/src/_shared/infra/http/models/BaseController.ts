@@ -16,18 +16,6 @@ export abstract class BaseController {
     }
   }
 
-  public fail(response: Response, error: Error | string): Response {
-    console.log(error);
-
-    return response.status(500).json({
-      message: 'Internal Server Error',
-    });
-  }
-
-  public conflict(response: Response, message?: string): Response {
-    return BaseController.jsonResponse(response, 409, message || 'Conflict');
-  }
-
   public static jsonResponse(
     response: Response,
     code: number,
@@ -36,6 +24,26 @@ export abstract class BaseController {
     return response.status(code).json({
       message,
     });
+  }
+
+  public fail(response: Response, error: Error | string): Response {
+    console.log(error);
+
+    return response.status(500).json({
+      message: error,
+    });
+  }
+
+  public conflict(response: Response, message?: string): Response {
+    return BaseController.jsonResponse(response, 409, message || 'Conflict');
+  }
+
+  public clientError(response: Response, message?: string): Response {
+    return BaseController.jsonResponse(
+      response,
+      400,
+      message || 'Client error'
+    );
   }
 
   public ok<T>(response: Response, dto?: T): Response {

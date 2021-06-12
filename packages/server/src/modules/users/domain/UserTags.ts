@@ -30,6 +30,10 @@ export class UserTags extends ValueObject<IUserTagsProps> {
   private static isValidTags(tags: string[]): boolean {
     const regex = /^[a-zA-Z]*$/;
 
+    if (!Array.isArray(tags)) {
+      return false;
+    }
+
     for (const tag of tags) {
       const result = regex.test(tag);
 

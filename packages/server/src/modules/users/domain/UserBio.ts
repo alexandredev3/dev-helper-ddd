@@ -26,13 +26,13 @@ export class UserBio extends ValueObject<IUserBioProps> {
       return Result.fail<UserBio>(bioResult.message);
     }
 
-    const minLengthResult = Guard.againstAtLeast(this.minLength, bio);
+    const minLengthResult = Guard.againstAtLeast(this.minLength, bio, 'bio');
 
     if (!minLengthResult.succeeded) {
       return Result.fail<UserBio>(minLengthResult.message);
     }
 
-    const maxLengthResult = Guard.againstAtMost(this.maxLength, bio);
+    const maxLengthResult = Guard.againstAtMost(this.maxLength, bio, 'bio');
 
     if (!maxLengthResult.succeeded) {
       return Result.fail<UserBio>(maxLengthResult.message);

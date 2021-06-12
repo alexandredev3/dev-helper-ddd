@@ -9,9 +9,9 @@ export class Result<T> {
 
   public isFailure: boolean;
 
-  public error?: T | string;
+  public error: T | string | null;
 
-  private _value?: T;
+  private _value: T | null;
 
   public constructor({ isSuccess, error, value }: IResultProps<T>) {
     if (isSuccess && error) {
@@ -28,8 +28,8 @@ export class Result<T> {
 
     this.isSuccess = isSuccess;
     this.isFailure = !isSuccess;
-    this.error = error;
-    this._value = value;
+    this.error = error || null;
+    this._value = value || null;
 
     Object.freeze(this);
   }
@@ -62,7 +62,7 @@ export class Result<T> {
     });
   }
 
-  public static fail<U>(error?: string): Result<U> {
+  public static fail<U>(error: any): Result<U> {
     return new Result<U>({
       isSuccess: false,
       error,

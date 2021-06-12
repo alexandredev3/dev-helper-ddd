@@ -33,7 +33,7 @@ module.exports = {
     "max-classes-per-file": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "no-console": "off",
-    "linebreak-style": ["error", process.platform === 'win32' ? 'windows' : 'unix'],
+    // "linebreak-style": ["error", 'unix'],
     "import/prefer-default-export": "off",
     "@typescript-eslint/explicit-function-return-type": ["off"],
     "prefer-promise-reject-errors": ["off"],

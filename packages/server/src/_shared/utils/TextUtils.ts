@@ -10,14 +10,4 @@ export class TextUtils {
 
     return safeText;
   }
-
-  public static sanitizeBulk(unsafeTexts: string[]): string[] {
-    const safeTexts: string[] = [];
-
-    for (const unsafeText of unsafeTexts) {
-      safeTexts.push(this.sanitize(unsafeText));
-    }
-
-    return safeTexts;
-  }
 }

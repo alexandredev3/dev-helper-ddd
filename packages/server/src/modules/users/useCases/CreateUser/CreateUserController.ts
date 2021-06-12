@@ -14,15 +14,17 @@ export class CreateUserController extends BaseController {
   }
 
   public async executeImpl(request: Request, response: Response): Promise<any> {
-    let dto: ICreateUserDTO = request.body as unknown as ICreateUserDTO;
+    const dto: ICreateUserDTO = request.body as unknown as ICreateUserDTO;
 
-    dto = {
-      name: TextUtils.sanitize(dto.name),
-      username: TextUtils.sanitize(dto.username),
-      email: TextUtils.sanitize(dto.email),
-      password: TextUtils.sanitize(dto.password),
-      tags: TextUtils.sanitizeBulk(dto.tags),
-    };
+    // dto = {
+    //   name: TextUtils.sanitize(dto.name),
+    //   username: TextUtils.sanitize(dto.username),
+    //   email: TextUtils.sanitize(dto.email),
+    //   password: TextUtils.sanitize(dto.password),
+    //   tags: dto.tags.map((tag) => {
+    //     return TextUtils.sanitize(tag);
+    //   }),
+    // };
 
     try {
       const useCase = container.resolve(CreateUserUseCase);
@@ -37,6 +39,8 @@ export class CreateUserController extends BaseController {
             return this.conflict(response, error.errorValue().message);
           case CreateUserErrors.UsernameTakenError:
             return this.conflict(response, error.errorValue().message);
+          case CreateUserErrors.DTOFailed:
+            return this.clientError(response, error.errorValue().message);
           default:
             return this.fail(response, error.errorValue().message);
         }
