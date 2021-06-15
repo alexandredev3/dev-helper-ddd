@@ -22,20 +22,19 @@ export class AuthenticationUseCase
 {
   private userRepository;
 
-  private jwtAuthService: JWTAuthService;
-
   constructor(
     @inject('UserRepository')
     userRepository: IUserRepository
   ) {
     this.userRepository = userRepository;
-    this.jwtAuthService = container.resolve(JWTAuthService);
   }
 
   public async execute(request: IAuthenticationDTO): Promise<Response> {
     let user: User | null;
     let email: UserEmail;
     let password: UserPassword;
+
+    const jwtAuthService = container.resolve(JWTAuthService);
 
     try {
       const emailOrError = UserEmail.create({
@@ -66,7 +65,7 @@ export class AuthenticationUseCase
         return left(new AuthenticationErrors.PasswordDoesntMatchError());
       }
 
-      const accessToken = this.jwtAuthService.sign({
+      const accessToken = jwtAuthService.sign({
         isEmailVerified: user.isEmailVerified,
         userId: user.userId.id.toString(),
         username: user.username.value,
