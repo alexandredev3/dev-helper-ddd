@@ -28,12 +28,12 @@ export class AuthenticationUseCase
     @inject('UserRepository')
     userRepository: IUserRepository
   ) {
-    this.jwtAuthService = container.resolve(JWTAuthService);
     this.userRepository = userRepository;
+    this.jwtAuthService = container.resolve(JWTAuthService);
   }
 
   public async execute(request: IAuthenticationDTO): Promise<Response> {
-    let user: User;
+    let user: User | null;
     let email: UserEmail;
     let password: UserPassword;
 
@@ -60,7 +60,7 @@ export class AuthenticationUseCase
         return left(new AuthenticationErrors.UserDoesNotExistsError());
       }
 
-      const passwordValid = await password.comparePassword(password.value);
+      const passwordValid = await user.password.comparePassword(password.value);
 
       if (!passwordValid) {
         return left(new AuthenticationErrors.PasswordDoesntMatchError());

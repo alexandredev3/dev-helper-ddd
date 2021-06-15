@@ -13,11 +13,8 @@ import { AuthenticationErrors } from './AuthenticationErrors';
 import { AuthenticationUseCase } from './AuthenticationUseCase';
 
 export class AuthenticationController extends BaseController {
-  private useCase: AuthenticationUseCase;
-
   constructor() {
     super();
-    this.useCase = container.resolve(AuthenticationUseCase);
   }
 
   public async executeImpl(
@@ -32,7 +29,9 @@ export class AuthenticationController extends BaseController {
     } as IAuthenticationDTO;
 
     try {
-      const result = await this.useCase.execute(dto);
+      const useCase = container.resolve(AuthenticationUseCase);
+
+      const result = await useCase.execute(dto);
 
       if (result.isLeft()) {
         const error = result.value;

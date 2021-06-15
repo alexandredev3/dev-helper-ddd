@@ -38,7 +38,9 @@ export class UserRepository implements IUserRepository {
     return UserMap.toDomain(user);
   }
 
-  public async findUserByEmail(email: UserEmail | string): Promise<User> {
+  public async findUserByEmail(
+    email: UserEmail | string
+  ): Promise<User | null> {
     const user = await this.ormRepository.findOne({
       where: {
         email: email instanceof UserEmail ? email.value : email,
@@ -46,7 +48,7 @@ export class UserRepository implements IUserRepository {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      return null;
     }
 
     return UserMap.toDomain(user);
