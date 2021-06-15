@@ -12,12 +12,13 @@
   "license": "MIT",
   "scripts": {
     "server:dev": "yarn workspace @dev-helper/server dev",
+    "server:add": "yarn workspace @dev-helper/server add",
     "typeorm": "cross-env tsnd ./node_modules/typeorm/cli.js --config ./ormconfig.ts"
   },
   "dependencies": {
+    "@dev-helper/environment": "*",
     "dompurify": "^2.2.9",
-    "uuid": "^8.3.2",
-    "@dev-helper/environment": "*"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@dev-helper/eslint-config": "*",

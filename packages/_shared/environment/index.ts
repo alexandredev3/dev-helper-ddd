@@ -28,3 +28,5 @@ export const {
   DEV_HELPER_TEST_DB_USERNAME,
   DEV_HELPER_TEST_DB_LOGGING,
 } = process.env;
+
+export const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.env;
