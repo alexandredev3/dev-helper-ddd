@@ -6,6 +6,7 @@ import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 import { UserBio } from './Bio';
 import { UserEmail } from './Email';
 import { UserId } from './Id';
+import { JWTToken } from './JWT';
 import { UserName } from './Name';
 import { UserPassword } from './Password';
 import { UserTags } from './Tags';
@@ -78,6 +79,11 @@ export class User extends Entity<IUserProps> {
 
   get lastLogin(): Date | undefined {
     return this.props.lastLogin;
+  }
+
+  public setAccessToken(token: JWTToken): void {
+    // addDomainEvent: UserLoggedIn TODO;
+    this.props.acessToken = token;
   }
 
   private constructor(props: IUserProps, id?: UniqueEntityID) {
