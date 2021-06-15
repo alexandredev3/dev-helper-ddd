@@ -46,6 +46,10 @@ export abstract class BaseController {
     );
   }
 
+  public notFound(response: Response, message?: string): Response {
+    return BaseController.jsonResponse(response, 404, message || 'not found');
+  }
+
   public ok<T>(response: Response, dto?: T): Response {
     if (dto) {
       response.type('appliction/json');
