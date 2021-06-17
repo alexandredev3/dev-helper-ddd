@@ -5,5 +5,5 @@ export interface IAuthenticationDTO {
 
 export interface IAuthenticationDTOResponse {
   accessToken: string;
-  // refreshToken: string; TODO
+  refreshToken: string;
 }

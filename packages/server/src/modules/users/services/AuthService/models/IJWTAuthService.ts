@@ -9,12 +9,16 @@ export interface IJWTAuthService {
     refreshToken: RefreshToken,
     token: JWTToken
   ): Promise<void>;
+  createRefreshToken(): RefreshToken;
   clearAllToken(): Promise<any>;
   countSessions(username: string): Promise<number>;
   clearAllSessions(username: string): Promise<void>;
   sessionExists(username: string, refreshToken: RefreshToken): Promise<boolean>;
   countTokens(): Promise<number>;
-  getToken(username: string, refreshToken: RefreshToken): Promise<string>;
+  getToken(
+    username: string,
+    refreshToken: RefreshToken
+  ): Promise<string | null>;
   getTokens(username: string): Promise<string[]>;
   clearToken(username: string, refreshToken: string): Promise<void>;
 }

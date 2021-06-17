@@ -25,6 +25,16 @@ export class RedisClient implements IRedisClient {
     return JSON.parse(data) as T;
   }
 
+  public async recoveryMany<T>(prefix: string): Promise<T[]> {
+    const data = await this.client.keys(`${prefix}:*`);
+
+    const dataParsed = data.map((item) => {
+      return JSON.parse(item);
+    });
+
+    return dataParsed;
+  }
+
   public async exists(key: string): Promise<boolean> {
     const exists = await this.client.exists(key);
 

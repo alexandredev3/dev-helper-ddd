@@ -71,13 +71,16 @@ export class AuthenticationUseCase
         username: user.username.value,
       });
 
-      user.setAccessToken(accessToken);
+      const refreshToken = jwtAuthService.createRefreshToken();
+
+      user.setAccessToken(accessToken, refreshToken);
 
       // jwtAuthService: save Authenticated User TODO;
 
       return right(
         Result.ok<IAuthenticationDTOResponse>({
           accessToken,
+          refreshToken,
         })
       );
     } catch (error) {
