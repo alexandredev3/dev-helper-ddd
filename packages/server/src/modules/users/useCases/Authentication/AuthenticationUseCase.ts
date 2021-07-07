@@ -20,7 +20,7 @@ import { Response } from './AuthenticationResponse';
 export class AuthenticationUseCase
   implements IUseCase<IAuthenticationDTO, Response>
 {
-  private userRepository;
+  private userRepository: IUserRepository;
 
   constructor(
     @inject('UserRepository')
@@ -75,7 +75,7 @@ export class AuthenticationUseCase
 
       user.setAccessToken(accessToken, refreshToken);
 
-      // jwtAuthService: save Authenticated User TODO;
+      await jwtAuthService.saveAuthenticatedUser(user);
 
       return right(
         Result.ok<IAuthenticationDTOResponse>({

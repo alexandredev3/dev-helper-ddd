@@ -1,3 +1,5 @@
+import { User } from '@modules/users/domain/User';
+
 import { JWTToken, IJWTClaims, RefreshToken } from '../../../domain/User/JWT';
 
 export interface IJWTAuthService {
@@ -21,4 +23,5 @@ export interface IJWTAuthService {
   ): Promise<string | null>;
   getTokens(username: string): Promise<string[]>;
   clearToken(username: string, refreshToken: string): Promise<void>;
+  saveAuthenticatedUser(user: User): Promise<void>;
 }

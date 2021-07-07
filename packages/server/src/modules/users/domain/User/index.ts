@@ -1,8 +1,10 @@
 import { Guard } from '@shared/core/Guard';
 import { Result } from '@shared/core/Result';
-import { Entity } from '@shared/domain/Entity';
+import { AggregateRoot } from '@shared/domain/AggregateRoot';
 import { UniqueEntityID } from '@shared/domain/UniqueEntityID';
 
+import { UserCreated } from '../events/User/UserCreated';
+import { UserSession } from '../events/User/UserSession';
 import { UserBio } from './Bio';
 import { UserEmail } from './Email';
 import { UserId } from './Id';
@@ -27,8 +29,7 @@ interface IUserProps {
   lastLogin?: Date;
 }
 
-// extends with aggregateRoot when implemented the DomainEvents.
-export class User extends Entity<IUserProps> {
+export class User extends AggregateRoot<IUserProps> {
   get userId(): UserId {
     return UserId.create(this._id).getValue();
   }
@@ -81,8 +82,15 @@ export class User extends Entity<IUserProps> {
     return this.props.lastLogin;
   }
 
+  public isAuthenticated(): boolean {
+    const isAuthenticated =
+      !!this.props.acessToken && !!this.props.refreshToken;
+
+    return isAuthenticated;
+  }
+
   public setAccessToken(token: JWTToken, refreshToken: RefreshToken): void {
-    // addDomainEvent: UserLoggedIn TODO;
+    this.addDomainEvent(new UserSession(this));
     this.props.acessToken = token;
     this.props.refreshToken = refreshToken;
     this.props.lastLogin = new Date();
@@ -103,8 +111,8 @@ export class User extends Entity<IUserProps> {
       return Result.fail<User>(guardResult.message);
     }
 
-    // if not have a id in first time. Its because is a new user.
-    // const isNewUser = !!id === false; TODO
+    // not have a id is a new user.
+    const isNewUser = !id;
 
     const user = new User(
       {
@@ -115,10 +123,9 @@ export class User extends Entity<IUserProps> {
       id
     );
 
-    // [DomainEvent]: UserCreated TODO.
-    // if (isNewUser) {
-    //  ...
-    // }
+    if (isNewUser) {
+      user.addDomainEvent(new UserCreated(user));
+    }
 
     return Result.ok<User>(user);
   }

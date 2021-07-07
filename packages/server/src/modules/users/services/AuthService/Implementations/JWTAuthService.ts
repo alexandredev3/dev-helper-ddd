@@ -3,6 +3,7 @@ import randtoken from 'rand-token';
 import { injectable, inject } from 'tsyringe';
 
 import { config, IAuthConfig } from '@config/auth';
+import { User } from '@modules/users/domain/User';
 import {
   IJWTClaims,
   JWTToken,
@@ -89,5 +90,17 @@ export class JWTAuthService implements IJWTAuthService {
     );
 
     return values;
+  }
+
+  public async saveAuthenticatedUser(user: User): Promise<void> {
+    if (user.isAuthenticated()) {
+      if (user.acessToken && user.refreshToken) {
+        await this.addToken(
+          user.username.value,
+          user.refreshToken,
+          user.acessToken
+        );
+      }
+    }
   }
 }
