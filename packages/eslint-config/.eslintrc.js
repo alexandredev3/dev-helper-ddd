@@ -21,19 +21,22 @@ module.exports = {
     'react',
     '@typescript-eslint',
     'prettier',
-    'eslint-plugin-import-helpers'
+    'eslint-plugin-import-helpers',
+    'import'
   ],
   rules: {
     "no-new": "off",
     "no-prototype-builtins": "off",
     "camelcase": "off",
+    "no-use-before-define": ["error", { "classes": false }],
     "no-restricted-syntax": "off",
     "max-classes-per-file": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "no-console": "off",
-    "linebreak-style": ["error", process.platform === 'win32' ? 'windows' : 'unix'],
+    // "linebreak-style": ["error", 'unix'],
     "import/prefer-default-export": "off",
     "@typescript-eslint/explicit-function-return-type": ["off"],
+    "prefer-promise-reject-errors": ["off"],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -94,7 +97,10 @@ module.exports = {
     "import/resolver": {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
-      }
+      },
+      "typescript": {
+        "project": "packages/*/tsconfig.json",
+      },
     }
   }
 };
